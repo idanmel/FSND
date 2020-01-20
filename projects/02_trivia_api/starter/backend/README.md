@@ -66,29 +66,129 @@ One note before you delve into your tasks: for each endpoint you are expected to
 8. Create a POST endpoint to get questions to play the quiz. This endpoint should take category and previous question parameters and return a random questions within the given category, if provided, and that is not one of the previous questions. 
 9. Create error handlers for all expected errors including 400, 404, 422 and 500. 
 
-REVIEW_COMMENT
+## API Documentation
+### Endpoints
 ```
-This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code. 
-
-Endpoints
 GET '/categories'
-GET ...
-POST ...
-DELETE ...
+GET '/questions'
+DELETE '/questions/<int>'
+POST '/questions'
+POST '/questions/search'
+GET '/categories/<int>/questions'
+POST '/quizzes'
+```
 
-GET '/categories'
+#### GET '/categories'
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
 - Request Arguments: None
-- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
-{'1' : "Science",
-'2' : "Art",
-'3' : "Geography",
-'4' : "History",
-'5' : "Entertainment",
-'6' : "Sports"}
-
+- Returns: An object of id: category_string key:value pairs. 
+```
+{
+    '1' : "Science",
+    '2' : "Art",
+    '3' : "Geography",
+    '4' : "History",
+    '5' : "Entertainment",
+    '6' : "Sports"
+}
 ```
 
+#### GET '/questions'
+- Fetches questions, number of total questions, categories, and current category.
+- Request Arguments: page
+- Returns: An object with the above
+```
+{
+    "questions": [
+        {
+            'id': 1,
+            'question': "Question Text",
+            'answer': "Answer Text",
+            'category': category number,
+            'difficulty': difficulty number
+        }
+    ],
+    "total_questions": 20,
+    "categories": {
+        '1' : "Science",
+        '2' : "Art",
+        '3' : "Geography",
+        '4' : "History",
+        '5' : "Entertainment",
+        '6' : "Sports"
+    },
+    "current_category": 1,
+}
+```
+
+#### DELETE '/questions/<int>'
+- Deletes a questions
+- Request Arguments: None
+- Returns: 204 as a success code, 422 for failure
+
+#### POST '/questions'
+- Creates a new question
+- ContentType: 'application/json'
+- Data: {"question": text, "answer": text, "difficulty": number from 1 to 5, "category": category id}
+- Returns: 201 for successful insertion
+
+#### POST '/questions/search'
+- Fetches questions of which the search term is a sub-string of
+- ContentType: 'application/json'
+- Data: { searchTerm: text }`
+- Returns: The questions that match this search term, total number of questions and current category
+```
+{
+    "questions": [
+        {
+            'id': 1,
+            'question': "Question Text",
+            'answer': "Answer Text",
+            'category': category number,
+            'difficulty': difficulty number
+        }
+    ],
+    "total_questions": 20,
+    "current_category": 1,
+}
+```
+
+#### GET '/categories/<int>/questions'
+- Fetches all the questions of this category
+- Request Arguments: None
+- Returns: All the questions for this category, total number of questions and current category
+```
+{
+    "questions": [
+        {
+            'id': 1,
+            'question': "Question Text",
+            'answer': "Answer Text",
+            'category': category number,
+            'difficulty': difficulty number
+        }
+    ],
+    "total_questions": 20,
+    "current_category": 1,
+}
+```
+
+#### POST '/quizzes'
+- Fetches a random question that was not returned before, either for a specific category, or from all categories
+- ContentType: 'application/json'
+- Data: List of question id's and current category: {"previous_questions": [12, 5, 7], "quiz_category": {"type": Politics", "id": 1}
+- Returns: a question
+```
+{
+    "question": {
+        'id': 1,
+        'question': "Question Text",
+        'answer': "Answer Text",
+        'category': category number,
+        'difficulty': difficulty number
+    }
+}
+```
 
 ## Testing
 To run the tests, run
